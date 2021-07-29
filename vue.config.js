@@ -1,15 +1,17 @@
 const webpack = require('webpack')
-const GitRevisionPlugin = require('git-revision-webpack-plugin')
+// const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const packageJson = require('./package.json')
 
-const gitRevisionPlugin = new GitRevisionPlugin({
-  versionCommand: 'describe --tags --abbrev=0 --always',
-  commithashCommand: 'rev-parse --short HEAD'
-})
+// const gitRevisionPlugin = new GitRevisionPlugin({
+//   versionCommand: 'describe --tags --abbrev=0 --always',
+//   commithashCommand: 'rev-parse --short HEAD'
+// })
 
 const env = {
-  VERSION: gitRevisionPlugin.version(),
-  BUILD: gitRevisionPlugin.commithash(),
+  // VERSION: gitRevisionPlugin.version(),
+  // BUILD: gitRevisionPlugin.commithash(),
+  VERSION: '0.0.1',
+  BUILD: '0.0.1',
   LICENSE: packageJson['license'],
   AUTHOR: packageJson['author']['name']
 }
@@ -37,7 +39,7 @@ module.exports = {
   productionSourceMap: false,
   configureWebpack: {
     plugins: [
-      gitRevisionPlugin,
+      // gitRevisionPlugin,
       environmentPlugin
     ]
   }
