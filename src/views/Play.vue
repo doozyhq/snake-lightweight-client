@@ -1,12 +1,12 @@
 <template>
   <div class="play">
-    <h1>Play {{ name }}</h1>
+    <h1 v-if="embed !== 'true'">Play {{ name }}</h1>
     <div class="play-content">
-      <div class="play-content-share">
+      <div class="play-content-share" v-if="embed !== 'true'">
         <SocialSharingBlock/>
       </div>
-      <div class="play-content-instruction">Use arrows, WASD, IJKL or mouse</div>
-      <div class="play-content-details">
+      <div class="play-content-instruction" v-if="embed !== 'true'">Use arrows, WASD, IJKL or mouse</div>
+      <div class="play-content-details" v-if="embed !== 'true'">
         <span><b>Details</b></span>
         <span>Players: {{ game.count }}/{{ game.limit }}</span>
         <span>Messages: {{ game.rate }} per sec</span>
@@ -22,20 +22,22 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
-import converter from 'number-to-words'
-import Playground from '@/components/Playground'
-import { FETCH_GAME, UPDATE_GAME } from '@/store/actions.type'
-import store from '@/store'
-import SocialSharingBlock from '@/components/SocialSharingBlock'
+import { mapGetters } from "vuex";
+import converter from "number-to-words";
+import Playground from "@/components/Playground";
+import { FETCH_GAME, UPDATE_GAME } from "@/store/actions.type";
+import store from "@/store";
+import SocialSharingBlock from "@/components/SocialSharingBlock";
 
 export default {
-  name: 'play',
+  name: "play",
   computed: {
-    ...mapGetters(['game', 'isLoadingGame']),
-    name: function () {
-      return 'game ' + converter.toWords(this.game.id)
+    ...mapGetters(["game", "isLoadingGame"]),
+    name: function() {
+      return "game " + converter.toWords(this.game.id);
+    },
+    embed() {
+      return this.$route.query.embed;
     }
   },
   components: {
@@ -43,56 +45,54 @@ export default {
     Playground
   },
   methods: {
-    updateGame () {
-      store.dispatch(UPDATE_GAME, this.game.id)
+    updateGame() {
+      store.dispatch(UPDATE_GAME, this.game.id);
     }
   },
-  beforeRouteEnter (to, from, next) {
-    Promise.all([
-      store.dispatch(FETCH_GAME, to.params.id)
-    ]).then(() => {
-      next()
-    })
+  beforeRouteEnter(to, from, next) {
+    Promise.all([store.dispatch(FETCH_GAME, to.params.id)]).then(() => {
+      next();
+    });
   },
-  mounted () {
+  mounted() {
     this.gameUpdateInterval = setInterval(() => {
-      this.updateGame()
-    }, 10000)
+      this.updateGame();
+    }, 10000);
   },
-  beforeDestroy () {
-    clearInterval(this.gameUpdateInterval)
+  beforeDestroy() {
+    clearInterval(this.gameUpdateInterval);
   }
-}
+};
 </script>
 <style lang="scss">
-  .play {
-    font-family: Classic, sans-serif;
-    letter-spacing: 2px;
+.play {
+  font-family: Classic, sans-serif;
+  letter-spacing: 2px;
 
-    h1 {
-      text-align: center;
-      font-size: 3rem;
+  h1 {
+    text-align: center;
+    font-size: 3rem;
+  }
+
+  .play-content {
+    max-width: 790px;
+    margin: 0 auto;
+
+    .play-content-share {
+      margin: 20px 0px;
     }
 
-    .play-content {
-      max-width: 790px;
-      margin: 0 auto;
-
-      .play-content-share {
-        margin: 20px 0px;
+    .play-content-details {
+      span + span {
+        margin-left: 15px;
       }
+    }
 
-      .play-content-details {
-          span + span {
-            margin-left: 15px;
-          }
-      }
-
-      .play-content-instruction {
-        margin: 20px 0px;
-        font-size: 1.3rem;
-        font-weight: bold;
-      }
+    .play-content-instruction {
+      margin: 20px 0px;
+      font-size: 1.3rem;
+      font-weight: bold;
     }
   }
+}
 </style>

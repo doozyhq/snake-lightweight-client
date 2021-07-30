@@ -31,7 +31,11 @@
 
         <div class="align-center">
           <div class="game-item-play" v-if="game.limit > game.count">
-            <router-link class="game-item-play-link" :to="{ name: 'play', params: { id: game.id }}">Play</router-link>
+            <router-link class="game-item-play-link" :to="{
+              name: 'play',
+              params: { id: game.id },
+              query: { displayName: displayName, embed: embed }
+            }">Play</router-link>
           </div>
 
           <div>Current players: {{ game.count }}/{{ game.limit }}</div>
@@ -57,13 +61,13 @@ export default {
   },
   computed: {
     ...mapGetters(["game", "isLoadingGame"]),
-    name: function() {
+    name() {
       return "Game " + converter.toWords(this.game.id);
     },
-    displayName: function() {
+    displayName() {
       return this.$route.query.displayName;
     },
-    embed: function() {
+    embed() {
       return this.$route.query.embed;
     }
   },
