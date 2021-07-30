@@ -1,4 +1,11 @@
 {
   "root": "dist",
-  "clean_urls": true
+  "clean_urls": true,
+  "routes": {
+    "/css/*": "/css/",
+    "/font-awesome-4.7.0/*": "/font-awesome-4.7.0/",
+    "/fonts/*": "/fonts/",
+    "/js/*": "/js/",
+    "/**": "index.html"
+  }
 }
